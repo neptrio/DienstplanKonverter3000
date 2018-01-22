@@ -1,4 +1,4 @@
-package sample;
+package konverter;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;

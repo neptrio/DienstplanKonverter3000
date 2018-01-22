@@ -1,4 +1,4 @@
-package sample;
+package konverter;
 
 public class ShiftType {
     protected int start;
