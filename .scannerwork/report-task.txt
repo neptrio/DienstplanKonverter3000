@@ -1,0 +1,6 @@
+projectKey=neptrio:dienstplankonverter3000
+serverUrl=http://localhost:9000
+serverVersion=6.6.0.32724
+dashboardUrl=http://localhost:9000/dashboard/index/neptrio:dienstplankonverter3000
+ceTaskId=AV-YRwtWvDDGHdULSBzD
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AV-YRwtWvDDGHdULSBzD
