@@ -15,23 +15,25 @@ import java.util.TimeZone;
 import java.util.logging.Logger;
 
 
-public class CalenderBuilder implements ICalenderBuilder {
+public class CalenderBuilder extends Thread {
 
     private Logger logger;
 
     private String pathOutputDirectory;
     private int year;
     private int month;
+    private Employee employee;
 
-    public CalenderBuilder(Logger logger, String pathOutputDirectory, int month, int year) {
+    public CalenderBuilder(Employee employee, Logger logger, String pathOutputDirectory, int month, int year) {
         this.pathOutputDirectory = pathOutputDirectory;
         this.logger = logger;
         this.year = year;
         this.month = month;
+        this.employee = employee;
     }
 
-    public void createCalenderFile(Employee e) {
-
+    @Override
+    public void run() {
         boolean failureInCalender = false;
         File file;
 
@@ -43,7 +45,7 @@ public class CalenderBuilder implements ICalenderBuilder {
         ICalendar ical = new ICalendar();
         ical.getTimezoneInfo().setDefaultTimezone(germany);
 
-        for (ShiftDate shift : e.getDienste()) {
+        for (ShiftDate shift : employee.getDienste()) {
 
             if (shift.getName().equals("-"))
                 continue;
@@ -76,16 +78,16 @@ public class CalenderBuilder implements ICalenderBuilder {
 
                 ical.addEvent(event);
             } catch (IllegalArgumentException ex) {
-                logger.info("Fehler beim Erzeugen des Termins für: " + e.getName() + " Grund: " + ex);
-                System.out.println("Fehler beim Erzeugen des Termins für: " + e.getName() + " Grund: " + ex);
+                logger.info("Fehler beim Erzeugen des Termins für: " + employee.getName() + " Grund: " + ex);
+                System.out.println("Fehler beim Erzeugen des Termins für: " + employee.getName() + " Grund: " + ex);
                 failureInCalender = true;
             }
         }
 
         if(failureInCalender) {
-            file = new File(pathOutputDirectory + "\\" + e.getName() + "_FEHLERBEHAFTET.ics");
+            file = new File(pathOutputDirectory + "\\" + employee.getName() + "_FEHLERBEHAFTET.ics");
         }else{
-            file = new File(pathOutputDirectory + "\\" + e.getName() + ".ics");
+            file = new File(pathOutputDirectory + "\\" + employee.getName() + ".ics");
         }
         String str = Biweekly.write(ical).go();
         System.out.println(str);
@@ -93,9 +95,8 @@ public class CalenderBuilder implements ICalenderBuilder {
         try{
             Biweekly.write(ical).go(file);
         } catch (IOException biEx) {
-            logger.info("Fehler beim Erzeugen der Datei für: " + e.getName() + " Grund: " + biEx);
-            System.out.println("Fehler beim Erzeugen der Datei für: " + e.getName() + " Grund: " + biEx);
+            logger.info("Fehler beim Erzeugen der Datei für: " + employee.getName() + " Grund: " + biEx);
+            System.out.println("Fehler beim Erzeugen der Datei für: " + employee.getName() + " Grund: " + biEx);
         }
-
     }
 }

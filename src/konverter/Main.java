@@ -252,14 +252,16 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
             Logger logger = getLogger(absolutePathOutputDirectory);
 
-            ICalenderBuilder cb = new CalenderBuilder(
-                    logger,
-                    absolutePathOutputDirectory,
-                    monthDropDown.getSelectionModel().getSelectedIndex(),
-                    Integer.parseInt(yearInput.getText()));
+
 
             for (Employee employee : employees) {
-                cb.createCalenderFile(employee);
+                CalenderBuilder cb = new CalenderBuilder(
+                        employee,
+                        logger,
+                        absolutePathOutputDirectory,
+                        monthDropDown.getSelectionModel().getSelectedIndex(),
+                        Integer.parseInt(yearInput.getText()));
+                cb.start();
             }
 
             for (Handler h : logger.getHandlers()) {
